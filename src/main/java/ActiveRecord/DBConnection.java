@@ -6,45 +6,36 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class DBConnection {
-    private String dbname;
-    private String username;
-    private String password;
-    private String port;
-    private String host;
-    private Connection connect;
-    private static DBConnection instance;
+    private static String dbname = "testpersonne";
+    private String username = "root";
+    private String password ="";
+    private String port = "3306";
+    private String host = "localhost";
+    private static Connection instance;
 
-    private DBConnection(String dbname, String username, String password, String port, String host) {
-        this.dbname = dbname;
-        this.username = username;
-        this.password = password;
-        this.port = port;
-        this.host = host;
+    private DBConnection() throws SQLException, ClassNotFoundException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        // creation de la connection
+        Properties connectionProps = new Properties();
+        connectionProps.put("user", username);
+        connectionProps.put("password", password);
+        String urlDB = "jdbc:mysql://" + host + ":";
+        urlDB += port + "/" + dbname;
+        System.out.println(urlDB);
+        instance = DriverManager.getConnection(urlDB, connectionProps);
     }
 
-    public static DBConnection getConnection(){
+    public static synchronized Connection getConnection() throws SQLException, ClassNotFoundException {
         if(instance == null){
-            instance = new DBConnection("testpersonne", "root", "", "3306", "localhost");
-        }
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Properties connectionProps = new Properties();
-            connectionProps.put("user", instance.username);
-            connectionProps.put("password", instance.password);
-            String urlDB = "jdbc:mysql://" + instance.host + ":";
-            urlDB += instance.port + "/" + instance.dbname;
-            System.out.println(urlDB);
-            Connection connect = DriverManager.getConnection(urlDB, connectionProps);
-            instance.connect = connect;
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            new DBConnection();
         }
         return instance;
     }
 
-    public Connection getConnect(){
-        return connect;
+    public static synchronized void setNomDB(String nom) {
+        if(nom != null && nom != dbname){
+            dbname = nom;
+            instance = null;
+        }
     }
 }
