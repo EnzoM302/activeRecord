@@ -54,4 +54,36 @@ public class Personne {
         return new Personne (rs.getInt("id"), rs.getString("nom"), rs.getString("prenom"));
     }
 
+    public ArrayList<Personne>getPersonne() throws SQLException, ClassNotFoundException {
+        ArrayList<Personne> personne = findAll();
+        return personne;
+    }
+    public int getId() {
+        return id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public String toString() {
+        try {
+            ArrayList<Personne> personnes = getPersonne();
+            String result = "";
+            for (Personne p : personnes) {
+                result += ("["+p.getId() + "/"+ p.getNom() + "/" + p.getPrenom() + "]");
+            }
+            return result;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
 }
