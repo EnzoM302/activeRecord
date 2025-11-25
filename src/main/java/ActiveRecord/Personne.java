@@ -54,4 +54,18 @@ public class Personne {
         return new Personne (rs.getInt("id"), rs.getString("nom"), rs.getString("prenom"));
     }
 
+    public static void createTable() throws SQLException, ClassNotFoundException {
+        Connection dbc = DBConnection.getConnection();
+        PreparedStatement pst = dbc.prepareStatement("CREATE TABLE PERSONNE");
+        pst.executeUpdate();
+    }
+
+    public static void deleteTable() throws SQLException, ClassNotFoundException {
+        Connection dbc = DBConnection.getConnection();
+        PreparedStatement pst = dbc.prepareStatement("DROP TABLE IF EXISTS personne");
+        pst.executeUpdate();
+    }
+
+
+
 }
