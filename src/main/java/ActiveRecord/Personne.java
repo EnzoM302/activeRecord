@@ -15,7 +15,7 @@ public class Personne {
     private String prenom;
 
     public  Personne(int id, String nom, String prenom) {
-        this.id ++;
+        this.id = id;
         this.nom = nom;
         this.prenom = prenom;
     }
@@ -33,7 +33,7 @@ public class Personne {
 
 
     public static ArrayList<Personne> findAll() throws SQLException, ClassNotFoundException {
-        ArrayList<Personne> personne = new ArrayList<>();
+        ArrayList<Personne> personnes = new ArrayList<>();
         Connection dbc = DBConnection.getConnection();
         PreparedStatement pst = dbc.prepareStatement("SELECT * FROM personne");
         ResultSet rs = pst.executeQuery();
@@ -41,9 +41,9 @@ public class Personne {
             int id = rs.getInt("id");
             String nom = rs.getString("nom");
             String prenom = rs.getString("prenom");
-            personne.add(new Personne(id, nom, prenom));
+            personnes.add(new Personne(id, nom, prenom));
         }
-        return personne;
+        return personnes;
     }
 
     public static Personne findByName(String name) throws SQLException, ClassNotFoundException {
@@ -70,7 +70,7 @@ public class Personne {
 
 
 
-    public ArrayList<Personne>getPersonne() throws SQLException, ClassNotFoundException {
+    public static ArrayList<Personne>getPersonne() throws SQLException, ClassNotFoundException {
         ArrayList<Personne> personne = findAll();
         return personne;
     }
@@ -86,20 +86,7 @@ public class Personne {
     }
 
     public String toString() {
-        try {
-            ArrayList<Personne> personnes = getPersonne();
-            String result = "";
-            for (Personne p : personnes) {
-                result += ("["+p.getId() + "/"+ p.getNom() + "/" + p.getPrenom() + "]");
-            }
-            return result;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-
+        return "[" + this.id + "/" + this.nom + "/" + this.prenom + "]";
     }
 
 }

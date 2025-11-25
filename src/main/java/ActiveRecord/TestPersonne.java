@@ -14,7 +14,7 @@ public class TestPersonne {
     @Test
     public void testFindAll() throws SQLException, ClassNotFoundException {
         ArrayList<Personne> personnes = Personne.findAll();
-        assertEquals(personnes.toString(),"[-1/Spielberg/Steven][0/Scott/Ridley][1/Kubrick/Stanley][2/Fincher/David]");
-
+        String res = "[[1/Spielberg/Steven], [2/Scott/Ridley], [3/Kubrick/Stanley], [4/Fincher/David]]";
+        assertEquals(res, personnes.toString());
     }
 }
