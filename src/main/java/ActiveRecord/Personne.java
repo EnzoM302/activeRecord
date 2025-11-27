@@ -83,9 +83,8 @@ public class Personne {
     public static void deleteTable() throws SQLException, ClassNotFoundException {
         Connection dbc = DBConnection.getConnection();
         Statement statement = dbc.createStatement();
-        statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0");
+        statement.executeUpdate("DROP TABLE IF EXISTS film");
         statement.executeUpdate("DROP TABLE IF EXISTS personne");
-        statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1");
     }
 
 
