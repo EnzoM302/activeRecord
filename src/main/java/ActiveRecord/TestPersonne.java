@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.*;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Classe de test JUnit pour la classe {@link Personne}.
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * et supprimée après chaque exécution afin d'assurer l'indépendance des cas de test.
  */
 public class TestPersonne {
-
+    
     /**
      * Méthode exécutée avant chaque test.
      * <p>
@@ -33,8 +33,11 @@ public class TestPersonne {
      * @throws SQLException              si une erreur SQL survient
      * @throws ClassNotFoundException    si le driver JDBC n'est pas trouvé
      */
+
+    
     @BeforeEach
     public void setUp() throws SQLException, ClassNotFoundException {
+
         Personne.deleteTable();
         Personne.createTable();
 
@@ -47,6 +50,7 @@ public class TestPersonne {
         p2.savePersonne();
         p3.savePersonne();
         p4.savePersonne();
+
     }
 
     /**
@@ -59,10 +63,13 @@ public class TestPersonne {
      * @throws SQLException              si une erreur SQL survient
      * @throws ClassNotFoundException    si le driver JDBC n'est pas trouvé
      */
+
+
     @AfterEach
     public void tearDown() throws SQLException, ClassNotFoundException {
         Personne.deleteTable();
     }
+
 
     /**
      * Teste la méthode {@link Personne#findAll()}.
@@ -74,6 +81,8 @@ public class TestPersonne {
      * @throws SQLException              si une erreur SQL survient
      * @throws ClassNotFoundException    si le driver JDBC n'est pas trouvé
      */
+
+    
     @Test
     public void testFindAll() throws SQLException, ClassNotFoundException {
         ArrayList<Personne> personnes = Personne.findAll();
@@ -108,6 +117,12 @@ public class TestPersonne {
      * @throws SQLException              si une erreur SQL survient
      * @throws ClassNotFoundException    si le driver JDBC n'est pas trouvé
      */
+    @Test
+    public void testFindByIdInexistant() throws SQLException, ClassNotFoundException {
+        Personne personne = Personne.findById(999);
+        assertNull(personne);
+    }
+
     @Test
     public void testFindByName() throws SQLException, ClassNotFoundException {
         Personne personne = Personne.findByName("Spielberg");
