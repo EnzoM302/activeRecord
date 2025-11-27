@@ -26,8 +26,11 @@ public class Personne {
         PreparedStatement ps = connet.prepareStatement("SELECT * FROM personne WHERE id = ?");
         ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
-        Personne p = new Personne(id, rs.getString("nom"), rs.getString("prenom"));
-        return p;
+        if (rs.next()){
+            Personne p = new Personne(id, rs.getString("nom"), rs.getString("prenom"));
+            return p;
+        }
+        return null;
     }
 
 
@@ -51,7 +54,12 @@ public class Personne {
         PreparedStatement pst = dbc.prepareStatement("SELECT * FROM personne where nom = ?");
         pst.setString(1,name);
         ResultSet rs = pst.executeQuery();
-        return new Personne (rs.getInt("id"), rs.getString("nom"), rs.getString("prenom"));
+        if (rs.next()){
+            Personne p = new Personne(rs.getInt("id"), rs.getString("nom"), rs.getString("prenom"));
+            return p;
+        }
+        return null;
+
     }
 
 
@@ -87,6 +95,14 @@ public class Personne {
 
     public String toString() {
         return "[" + this.id + "/" + this.nom + "/" + this.prenom + "]";
+    }
+
+    public void delete() throws SQLException, ClassNotFoundException {
+        Connection dbc = DBConnection.getConnection();
+        PreparedStatement pst = dbc.prepareStatement("DELETE FROM personne WHERE id = ?");
+        pst.setInt(1, this.id);
+        pst.executeUpdate();
+        this.id = -1;
     }
 
 }
