@@ -97,12 +97,21 @@ public class Personne {
         return "[" + this.id + "/" + this.nom + "/" + this.prenom + "]";
     }
 
+
     public void delete() throws SQLException, ClassNotFoundException {
         Connection dbc = DBConnection.getConnection();
         PreparedStatement pst = dbc.prepareStatement("DELETE FROM personne WHERE id = ?");
         pst.setInt(1, this.id);
         pst.executeUpdate();
         this.id = -1;
+    }
+
+    public void savePersonne() throws SQLException, ClassNotFoundException {
+        Connection dbc = DBConnection.getConnection();
+        PreparedStatement pst = dbc.prepareStatement("INSERT INTO personne (nom, prenom) VALUES (?, ?)");
+        pst.setString(1, this.nom);
+        pst.setString(2, this.prenom);
+        pst.executeUpdate();
     }
 
 }
