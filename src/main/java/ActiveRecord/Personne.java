@@ -1,4 +1,4 @@
-package ActiveRecord;
+package ActiveRecord.src.main.java.ActiveRecord;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
