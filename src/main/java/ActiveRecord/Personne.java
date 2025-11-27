@@ -20,6 +20,10 @@ public class Personne {
         this.prenom = prenom;
     }
 
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
 
     public static Personne findById(int id) throws SQLException, ClassNotFoundException {
         Connection connet = DBConnection.getConnection();
@@ -65,14 +69,23 @@ public class Personne {
 
     public static void createTable() throws SQLException, ClassNotFoundException {
         Connection dbc = DBConnection.getConnection();
-        PreparedStatement pst = dbc.prepareStatement("CREATE TABLE PERSONNE");
-        pst.executeUpdate();
+        String SQL = "CREATE TABLE IF NOT EXISTS personne (" +
+                "id INT(11) NOT NULL AUTO_INCREMENT," +
+                "nom VARCHAR(40) NOT NULL," +
+                "prenom VARCHAR(40) NOT NULL," +
+                "PRIMARY KEY (id)" +
+                ")";
+        try (Statement statement = dbc.createStatement()) {
+            statement.executeUpdate(SQL);
+        }
     }
 
     public static void deleteTable() throws SQLException, ClassNotFoundException {
         Connection dbc = DBConnection.getConnection();
-        PreparedStatement pst = dbc.prepareStatement("DROP TABLE IF EXISTS personne");
-        pst.executeUpdate();
+        Statement statement = dbc.createStatement();
+        statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 0");
+        statement.executeUpdate("DROP TABLE IF EXISTS personne");
+        statement.executeUpdate("SET FOREIGN_KEY_CHECKS = 1");
     }
 
 

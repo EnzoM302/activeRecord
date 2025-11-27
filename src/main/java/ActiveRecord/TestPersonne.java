@@ -10,12 +10,14 @@ import org.junit.jupiter.api.Assertions.*;
 import java.sql.*;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPersonne {
 
+
     @BeforeEach
     public void setUp() throws SQLException, ClassNotFoundException {
+
         Personne.deleteTable();
         Personne.createTable();
 
@@ -24,17 +26,21 @@ public class TestPersonne {
         Personne p3 = new Personne(-1, "Kubrick", "Stanley");
         Personne p4 = new Personne(-1, "Fincher", "David");
 
-        p1.save();
-        p2.save();
-        p3.save();
-        p4.save();
+        p1.savePersonne();
+        p2.savePersonne();
+        p3.savePersonne();
+        p4.savePersonne();
 
     }
+
+
 
     @AfterEach
     public void tearDown() throws SQLException, ClassNotFoundException {
         Personne.deleteTable();
     }
+
+
 
     @Test
     public void testFindAll() throws SQLException, ClassNotFoundException {
@@ -48,6 +54,12 @@ public class TestPersonne {
         Personne personne = Personne.findById(1);
         String res = "[1/Spielberg/Steven]";
         assertEquals(res, personne.toString());
+    }
+
+    @Test
+    public void testFindByIdInexistant() throws SQLException, ClassNotFoundException {
+        Personne personne = Personne.findById(999);
+        assertNull(personne);
     }
 
     @Test
