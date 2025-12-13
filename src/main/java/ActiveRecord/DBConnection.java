@@ -1,4 +1,4 @@
-package ActiveRecord.src.main.java.ActiveRecord;
+package ActiveRecord;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -33,7 +33,7 @@ public class DBConnection {
     }
 
     public static synchronized void setNomDB(String nom) {
-        if(nom != null && nom != dbname){
+        if(nom != null && !nom.equals(dbname)){
             dbname = nom;
             instance = null;
         }

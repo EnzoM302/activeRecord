@@ -1,4 +1,4 @@
-package ActiveRecord.src.main.java.ActiveRecord;
+package ActiveRecord;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,15 +41,15 @@ public class TestPersonne {
         Personne.deleteTable();
         Personne.createTable();
 
-        Personne p1 = new Personne(-1, "Spielberg", "Steven");
-        Personne p2 = new Personne(-1, "Scott", "Ridley");
-        Personne p3 = new Personne(-1, "Kubrick", "Stanley");
-        Personne p4 = new Personne(-1, "Fincher", "David");
+        Personne p1 = new Personne("Spielberg", "Steven");
+        Personne p2 = new Personne( "Scott", "Ridley");
+        Personne p3 = new Personne( "Kubrick", "Stanley");
+        Personne p4 = new Personne( "Fincher", "David");
 
-        p1.savePersonne();
-        p2.savePersonne();
-        p3.savePersonne();
-        p4.savePersonne();
+        p1.save();
+        p2.save();
+        p3.save();
+        p4.save();
 
     }
 
@@ -123,10 +123,53 @@ public class TestPersonne {
         assertNull(personne);
     }
 
+    /**
+     * Teste de la méthode FindByName
+     * verifie la recherche par id retourne bien la personne attendue
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Test
     public void testFindByName() throws SQLException, ClassNotFoundException {
-        Personne personne = Personne.findByName("Spielberg");
+        ArrayList<Personne> personnes = Personne.findByName("Spielberg");
+
+        Personne personne = personnes.get(0);
         String res = "[1/Spielberg/Steven]";
         assertEquals(res, personne.toString());
+    }
+
+    /**
+     * Test de la methode save
+     * verifie la sauvegarde du nouveau nom
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    @Test
+    public void testUpdate() throws SQLException, ClassNotFoundException {
+        Personne p = new Personne( "Lucas", "George");
+        p.save();
+        int id = p.getId();
+
+        p.setNom("Lucas2");
+        p.save();
+
+        Personne p2 = Personne.findById(id);
+        assertEquals("Lucas2", p2.getNom());
+        assertEquals("George", p2.getPrenom());
+    }
+
+    /**
+     * test de la methode delete vérifie que la methode delete supprime bien la personne p
+     * et remet l'id a -1
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    @Test
+    public void testDelete() throws SQLException, ClassNotFoundException {
+        Personne p = new Personne(-1 , "Damon", "Matt");
+        p.save();
+        p.delete();
+
+        assertEquals(-1, p.getId());
     }
 }

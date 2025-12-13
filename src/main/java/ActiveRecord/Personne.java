@@ -1,4 +1,4 @@
-package ActiveRecord.src.main.java.ActiveRecord;
+package ActiveRecord;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,9 +10,15 @@ import java.util.ArrayList;
 
 
 public class Personne {
-    private int id = -1;
+    private int id;
     private String nom;
     private String prenom;
+
+    public  Personne(String nom, String prenom) {
+        this.id = -1;
+        this.nom = nom;
+        this.prenom = prenom;
+    }
 
     public  Personne(int id, String nom, String prenom) {
         this.id = id;
@@ -23,6 +29,8 @@ public class Personne {
     public void setNom(String nom) {
         this.nom = nom;
     }
+
+    public void setPrenom(String prenom) {this.prenom = prenom;}
 
 
     public static Personne findById(int id) throws SQLException, ClassNotFoundException {
@@ -53,17 +61,18 @@ public class Personne {
         return personnes;
     }
 
-    public static Personne findByName(String name) throws SQLException, ClassNotFoundException {
+    public static ArrayList<Personne> findByName(String name) throws SQLException, ClassNotFoundException {
+        ArrayList<Personne> personnes = new ArrayList<>();
         Connection dbc = DBConnection.getConnection();
-        PreparedStatement pst = dbc.prepareStatement("SELECT * FROM personne where nom = ?");
-        pst.setString(1,name);
-        ResultSet rs = pst.executeQuery();
-        if (rs.next()){
-            Personne p = new Personne(rs.getInt("id"), rs.getString("nom"), rs.getString("prenom"));
-            return p;
-        }
-        return null;
 
+        PreparedStatement pst = dbc.prepareStatement("SELECT * FROM personne where nom = ?");
+        pst.setString(1, name);
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()){
+            personnes.add(new Personne(rs.getInt("id"), rs.getString("nom"), rs.getString("prenom")));
+        }
+        return personnes;
     }
 
 
@@ -83,21 +92,17 @@ public class Personne {
     public static void deleteTable() throws SQLException, ClassNotFoundException {
         Connection dbc = DBConnection.getConnection();
         Statement statement = dbc.createStatement();
+
         statement.executeUpdate("DROP TABLE IF EXISTS film");
+
         statement.executeUpdate("DROP TABLE IF EXISTS personne");
     }
 
 
 
-
-    public static ArrayList<Personne>getPersonne() throws SQLException, ClassNotFoundException {
-        ArrayList<Personne> personne = findAll();
-        return personne;
-    }
     public int getId() {
         return id;
     }
-
     public String getNom() {
         return nom;
     }
@@ -118,12 +123,27 @@ public class Personne {
         this.id = -1;
     }
 
-    public void savePersonne() throws SQLException, ClassNotFoundException {
+    public void save() throws SQLException, ClassNotFoundException {
         Connection dbc = DBConnection.getConnection();
-        PreparedStatement pst = dbc.prepareStatement("INSERT INTO personne (nom, prenom) VALUES (?, ?)");
-        pst.setString(1, this.nom);
-        pst.setString(2, this.prenom);
-        pst.executeUpdate();
+        if (this.id == -1) {
+            String sql = "INSERT INTO personne (nom, prenom) VALUES (?, ?)";
+            PreparedStatement pst = dbc.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pst.setString(1, this.nom);
+            pst.setString(2, this.prenom);
+            pst.executeUpdate();
+
+            ResultSet rs = pst.getGeneratedKeys();
+            if (rs.next()) {
+                this.id = rs.getInt(1);
+            }
+        } else {
+            String sql = "UPDATE personne SET nom = ?, prenom = ? WHERE id = ?";
+            PreparedStatement pst = dbc.prepareStatement(sql);
+            pst.setString(1, this.nom);
+            pst.setString(2, this.prenom);
+            pst.setInt(3, this.id);
+            pst.executeUpdate();
+        }
     }
 
 }

@@ -1,12 +1,11 @@
-package ActiveRecord.src.main.java.ActiveRecord;
+package ActiveRecord;
 
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Classe de test JUnit pour {@link DBConnection}.
@@ -62,4 +61,6 @@ public class DBConnectionTest {
         assertTrue(connection instanceof Connection,
                 "La connexion doit être de type java.sql.Connection");
     }
+
+
 }
