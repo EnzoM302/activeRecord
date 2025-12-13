@@ -166,7 +166,7 @@ public class TestPersonne {
      */
     @Test
     public void testDelete() throws SQLException, ClassNotFoundException {
-        Personne p = new Personne(-1 , "Damon", "Matt");
+        Personne p = new Personne("Damon", "Matt");
         p.save();
         p.delete();
 

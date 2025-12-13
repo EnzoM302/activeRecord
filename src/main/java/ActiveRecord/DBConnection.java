@@ -15,7 +15,6 @@ public class DBConnection {
 
     private DBConnection() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        // creation de la connection
         Properties connectionProps = new Properties();
         connectionProps.put("user", username);
         connectionProps.put("password", password);
